@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Helpdesk IT RSUD Dr. Soetomo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+  <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+  <style>
+    :root {
+      --rsud-primary: #0077b6;
+      --rsud-secondary: #00b894;
+    }
+    body {
+      background: linear-gradient(135deg, #f3f6f9 0%, #eef2f8 100%);
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+    }
+    .hero-section {
+      background: url('assets/media/patterns/rsud.jpeg') center/cover no-repeat;
+      padding: 140px 0 120px 0;
+      position: relative;
+      color: #fff;
+    }
+    .hero-section::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(102, 108, 113, 0.65);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      animation: fadeInUp 1.2s ease;
+    }
+    .feature-card {
+      transition: all 0.35s ease;
+      border-top: 3px solid transparent;
+    }
+    .feature-card:hover {
+      transform: translateY(-8px);
+      border-top-color: var(--rsud-secondary);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    }
+    footer {
+      background-color: #f8f9fa;
+    }
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @media (max-width: 768px) {
+      .hero-section {
+        padding: 100px 0 80px;
+      }
+      .display-3 {
+        font-size: 2rem;
+      }
+      .fs-2 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+
+<body id="kt_body" class="bg-body">
+  <div class="d-flex flex-column flex-root">
+    <section class="hero-section text-center">
+      <div class="container hero-content">
+        <img src="assets/media/logos/lambangRsds.png" alt="RSUD Dr. Soetomo" width="120" class="mb-5" />
+        <h1 class="display-3 fw-bolder text-white mb-4">Helpdesk IT RSUD Dr. Soetomo</h1>
+        <p class="fs-2 text-white opacity-90 mb-10">Sistem Digital untuk Laporan & Troubleshooting IT di Lingkungan RSUD Dr. Soetomo</p>
+        <a href="signin.html" class="btn btn-lg fw-bold px-10 py-4" style="background-color: var(--rsud-secondary); color: #fff; border: none;">
+          Masuk ke Sistem
+        </a>
+      </div>
+    </section>
+
+    <section class="py-20 container">
+      <div class="text-center mb-15">
+        <h2 class="fs-1 fw-bolder text-dark mb-3">Fitur Utama</h2>
+        <p class="text-gray-600 fs-5">Sistem terintegrasi antara Pengguna, Admin, dan Teknisi ITKI D</p>
+      </div>
+
+      <div class="row g-10">
+        <div class="col-md-4">
+          <div class="card card-flush h-100 text-center feature-card shadow-sm p-8">
+            <div class="symbol symbol-80px bg-light-primary mb-5 mx-auto">
+              <i class="ki-outline ki-send fs-2tx text-primary"></i>
+            </div>
+            <h3 class="fw-bold text-dark mb-3">Laporan Cepat</h3>
+            <p class="text-gray-700">User dapat membuat laporan IT dengan cepat, lengkap dengan bukti pendukung seperti foto dan log error.</p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card card-flush h-100 text-center feature-card shadow-sm p-8">
+            <div class="symbol symbol-80px bg-light-success mb-5 mx-auto">
+              <i class="ki-outline ki-monitor fs-2tx text-success"></i>
+            </div>
+            <h3 class="fw-bold text-dark mb-3">Manajemen Admin</h3>
+            <p class="text-gray-700">Admin memonitor laporan, menentukan prioritas, dan menugaskan teknisi secara efisien.</p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card card-flush h-100 text-center feature-card shadow-sm p-8">
+            <div class="symbol symbol-80px bg-light-warning mb-5 mx-auto">
+              <i class="ki-outline ki-user-tick fs-2tx text-warning"></i>
+            </div>
+            <h3 class="fw-bold text-dark mb-3">Laporan Teknisi</h3>
+            <p class="text-gray-700">Teknisi dapat memperbarui status pekerjaan dan mengunggah hasil troubleshooting langsung di sistem.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20" style="background-color: #e9f9f0;">
+      <div class="container text-center" data-kt-scroll-trigger="onScroll">
+        <h2 class="fs-1 fw-bolder text-dark mb-6">Dikembangkan oleh ITKI</h2>
+        <p class="text-gray-700 fs-5 mb-10 mx-auto" style="max-width: 720px;">
+          Sistem ini merupakan bagian dari inisiatif digitalisasi RSUD Dr. Soetomo untuk meningkatkan pelayanan teknologi informasi
+          dan mempercepat proses penanganan masalah IT di seluruh instalasi dan unit kerja.
+        </p>
+        <a href="signin.html" class="btn btn-lg fw-bold px-10 py-4" style="background-color: var(--rsud-primary); color: #fff; border: none;">
+          Mulai Sekarang
+        </a>
+      </div>
+    </section>
+
+    <footer class="py-10 text-center border-top">
+      <div class="container">
+        <p class="text-gray-600 mb-0">© 2025 RSUD Dr. Soetomo - Instalasi Teknologi & Komunikasi (ITKI )</p>
+      </div>
+    </footer>
+  </div>
+
+  <script src="assets/plugins/global/plugins.bundle.js"></script>
+  <script src="assets/js/scripts.bundle.js"></script>
+</body>
+</html>

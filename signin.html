@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Daftar Akun - Helpdesk IT RSUD Dr. Soetomo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Metronic -->
+  <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" />
+  <link href="assets/css/style.bundle.css" rel="stylesheet" />
+
+<style>
+
+/* ===== Layout ===== */
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  font-family:"Inter",system-ui;
+}
+
+.signup-wrapper{
+  width:100%;
+  height:100vh;
+  display:flex;
+}
+
+/* ===== LEFT PANEL ===== */
+.signup-left{
+  flex:1.2;
+  background:url("assets/media/patterns/rsud.jpg") center/cover no-repeat;
+  position:relative;
+}
+
+.signup-left::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.8),rgba(0,0,0,.55));
+}
+
+.signup-left-content{
+  position:relative;
+  z-index:5;
+  color:white;
+  padding:60px;
+  max-width:520px;
+}
+
+.signup-left-content .logo{
+  width:90px;
+  margin-bottom:14px;
+}
+
+.signup-left-content h1{
+  margin:0;
+  font-size:28px;
+  font-weight:800;
+}
+
+.subtitle{
+  margin-top:6px;
+  opacity:.9;
+  font-size:14px;
+}
+
+.tagline{
+  display:inline-block;
+  margin-top:18px;
+  background:rgba(255,255,255,.1);
+  padding:10px 14px;
+  border-radius:10px;
+  font-weight:600;
+}
+
+/* ===== RIGHT PANEL ===== */
+.signup-right{
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:40px;
+  background:white;
+}
+
+.signup-card{
+  width:100%;
+  max-width:440px;
+}
+
+.signup-card .title{
+  font-weight:800;
+  margin-bottom:4px;
+}
+
+.signup-card .desc{
+  color:#64748b;
+  margin-bottom:30px;
+}
+
+/* ===== Responsive ===== */
+@media(max-width:900px){
+  .signup-left{ display:none; }
+  .signup-right{
+    width:100%;
+  }
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="signup-wrapper">
+
+  <!-- LEFT -->
+  <div class="signup-left">
+    <div class="signup-left-content">
+      <img src="assets/media/logos/lambangRsds.png" class="logo">
+
+      <h1>RSUD Dr. Soetomo</h1>
+      <p class="subtitle">
+        Helpdesk IT — Sistem Pelaporan & Perbaikan Infrastruktur Teknologi
+      </p>
+
+      <span class="tagline">
+        “Cepat • Tepat • Terintegrasi”
+      </span>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="signup-right">
+    <div class="signup-card">
+
+      <h2 class="title">Buat Akun Baru</h2>
+      <p class="desc">Isi data berikut untuk registrasi akun</p>
+
+      <form id="signupForm">
+
+        <div class="fv-row mb-5">
+          <label class="form-label fw-semibold">Username / NIP</label>
+          <input id="username" class="form-control form-control-lg"
+                 type="text" placeholder="Masukkan username" required>
+        </div>
+
+        <div class="fv-row mb-5">
+          <label class="form-label fw-semibold">Password</label>
+          <input id="password" class="form-control form-control-lg"
+                 type="password" placeholder="Masukkan password" required>
+        </div>
+
+        <div class="fv-row mb-5">
+          <label class="form-label fw-semibold">Pilih Role</label>
+          <select id="role" class="form-select form-select-lg" required>
+            <option value="">-- Pilih Role --</option>
+            <option value="user">User (Pegawai)</option>
+            <option value="admin">Admin / Operator</option>
+            <option value="teknisi">Teknisi IT</option>
+          </select>
+        </div>
+
+        <button type="submit"
+                class="btn btn-lg btn-primary w-100 fw-bold mb-4">
+          Daftar Akun
+        </button>
+
+        <a href="login.html" class="btn btn-light w-100">
+          Sudah punya akun? Login
+        </a>
+
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<!-- JS -->
+<script src="assets/plugins/global/plugins.bundle.js"></script>
+<script src="assets/js/scripts.bundle.js"></script>
+
+<script>
+document.getElementById("signupForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const role = document.getElementById("role").value.trim();
+
+  if (!username || !password || !role) {
+    alert("Harap isi semua field!");
+    return;
+  }
+
+  let accounts = JSON.parse(localStorage.getItem("accounts")) || [];
+
+  if (accounts.find(a => a.username === username)) {
+    alert("Username sudah terdaftar!");
+    return;
+  }
+
+  accounts.push({ username, password, role });
+  localStorage.setItem("accounts", JSON.stringify(accounts));
+
+  alert("Akun berhasil dibuat! Silakan login.");
+  window.location.href = "login.html";
+});
+</script>
+
+</body>
+</html>

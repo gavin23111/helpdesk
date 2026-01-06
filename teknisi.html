@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard Teknisi — Helpdesk IT</title>
+
+  <!-- Vendor -->
+  <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet">
+  <link href="assets/css/style.bundle.css" rel="stylesheet">
+
+  <!-- Helpdesk -->
+  <link href="assets/css/helpdesk-master.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside id="sidebar" class="sidebar teknisi">
+    <a href="#dashboard" class="active" onclick="navigate('#dashboard')">Dashboard</a>
+    <a href="#aktif" onclick="navigate('#aktif')">Tugas Aktif</a>
+    <a href="#riwayat" onclick="navigate('#riwayat')">Riwayat Tugas</a>
+    <a onclick="logout()" class="text-danger fw-bold" style="cursor:pointer">Logout</a>
+  </aside>
+
+  <!-- ================= NAVBAR ================= -->
+  <nav class="navbar">
+    <div class="d-flex align-items-center gap-3">
+      <button id="toggleSidebar" class="toggle-btn" aria-label="Toggle Sidebar">☰</button>
+      <h3>Helpdesk IT — Teknisi</h3>
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+      <div>👷 <span id="teknisiName"></span></div>
+      <button id="logoutBtn" class="btn btn-sm btn-logout">Logout</button>
+    </div>
+  </nav>
+
+  <!-- ================= CONTENT ================= -->
+  <main id="mainContent" class="content">
+
+    <!-- ===== DASHBOARD ===== -->
+    <section id="dashboard">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="fw-bold text-primary mb-0">Dashboard Teknisi</h5>
+            <small class="text-muted">Ringkasan tugas dan aktivitas</small>
+          </div>
+          <div class="text-muted">
+            Total tugas: <span id="totalTasks">0</span>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <p>Halo <strong id="userGreetingName"></strong>, berikut ringkasan tugas Anda.</p>
+
+          <!-- Counter -->
+          <div class="row g-3 mt-3">
+            <div class="col-md-3">
+              <div class="card card-counter counter-primary">
+                <small>Aktif</small>
+                <h2 id="countActive">0</h2>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card card-counter counter-success">
+                <small>Selesai</small>
+                <h2 id="countDone">0</h2>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card card-counter counter-info">
+                <small>Hari Ini</small>
+                <h2 id="countToday">0</h2>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card card-counter counter-warning">
+                <small>Pending</small>
+                <h2 id="countPending">0</h2>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity -->
+          <div class="row mt-4">
+            <div class="col-md-8">
+              <div class="card">
+                <h6 class="fw-semibold mb-2">Aktivitas Terbaru</h6>
+                <ul id="activityList" class="activity-list mb-0"></ul>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="card text-center">
+                <h6 class="fw-semibold mb-3">Aksi Cepat</h6>
+                <button class="btn btn-primary btn-sm w-100 mb-2" onclick="navigate('#aktif')">
+                  Lihat Tugas Aktif
+                </button>
+                <button class="btn btn-outline-secondary btn-sm w-100" onclick="navigate('#riwayat')">
+                  Lihat Riwayat
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TUGAS AKTIF ===== -->
+    <section id="aktif" class="hidden">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="fw-bold text-primary mb-0">Tugas Aktif</h5>
+          <div class="d-flex gap-2">
+            <input id="searchActive" class="form-control form-control-sm" placeholder="Cari no / judul">
+            <button id="refreshActive" class="btn btn-outline-primary btn-sm">Refresh</button>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-striped mb-0">
+           <thead>
+  <tr>
+    <th>No Tiket</th>
+    <th>Nama User</th>
+    <th>Unit Kerja</th>
+    <th>Judul</th>
+    <th>Kategori</th>
+    <th>Status</th>
+    <th>Tanggal</th>
+    <th>Aksi</th>
+  </tr>
+</thead>
+
+            <tbody id="activeTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== RIWAYAT ===== -->
+    <section id="riwayat" class="hidden">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="fw-bold text-primary mb-0">Riwayat Tugas</h5>
+          <input id="searchHistory" class="form-control form-control-sm w-auto" placeholder="Cari...">
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-striped mb-0">
+           <thead>
+  <tr>
+    <th>No Tiket</th>
+    <th>Nama User</th>
+    <th>Unit Kerja</th>
+    <th>Judul</th>
+    <th>Kategori</th>
+    <th>Status</th>
+    <th>Tanggal</th>
+    <th>Aksi</th>
+  </tr>
+</thead>
+
+            <tbody id="historyTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= MODAL DETAIL ================= -->
+  <div id="detailModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Detail Tugas</h5>
+        <button class="btn btn-light btn-sm" onclick="closeModal('detailModal')">✕</button>
+      </div>
+      <div id="detailContent"></div>
+      <div class="text-end mt-3" id="detailActions"></div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL FINISH ================= -->
+  <div id="finishModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Selesaikan Tugas</h5>
+        <button class="btn btn-light btn-sm" onclick="closeModal('finishModal')">✕</button>
+      </div>
+
+      <form id="finishForm">
+        <label class="form-label fw-semibold">No Tiket</label>
+        <input id="finishTicket" class="form-control mb-3" readonly>
+
+        <label class="form-label fw-semibold">Tanggal & Jam Selesai</label>
+        <input id="finishDate" type="datetime-local" class="form-control mb-3" required>
+
+        <label class="form-label fw-semibold">Foto Bukti</label>
+        <input id="finishPhoto" type="file" class="form-control mb-2" accept="image/*" required>
+        <div id="photoPreview" class="mb-3"></div>
+
+        <label class="form-label fw-semibold">Catatan</label>
+        <textarea id="finishNotes" class="form-control" rows="3"></textarea>
+
+        <div class="text-end mt-4">
+          <button type="button" id="confirmFinish" class="btn btn-success">Konfirmasi</button>
+          <button type="button" class="btn btn-secondary" onclick="closeModal('finishModal')">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+<script>
+function deepClone(o){ return JSON.parse(JSON.stringify(o)); }
+function escapeHtml(s){ return String(s||'').replace(/[&<>]/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;' }[m])); }
+
+/* INIT */
+const username = localStorage.getItem('username') || 'teknisi';
+document.getElementById('teknisiName').textContent = username;
+document.getElementById('userGreetingName').textContent = username;
+
+let state = {
+  reports: JSON.parse(localStorage.getItem('reports')||'[]'),
+  history: JSON.parse(localStorage.getItem('history')||'[]'),
+  activities: JSON.parse(localStorage.getItem('activities')||'[]')
+};
+
+function save(){
+  localStorage.setItem('reports', JSON.stringify(state.reports));
+  localStorage.setItem('history', JSON.stringify(state.history));
+  localStorage.setItem('activities', JSON.stringify(state.activities));
+}
+
+/* CEK TEKNISI */
+function isAssigned(r){
+  if(!r) return false;
+  if(!r.teknisi) return false;
+  if(Array.isArray(r.teknisi)) return r.teknisi.includes(username);
+  return r.teknisi.toString().split(',').map(x=>x.trim()).includes(username);
+}
+
+/* ===== DASHBOARD COUNTS ===== */
+function renderCounts(){
+  state.reports = JSON.parse(localStorage.getItem('reports')||'[]');
+  state.history = JSON.parse(localStorage.getItem('history')||'[]');
+
+  const myActive = state.reports.filter(isAssigned);
+  const myHist   = state.history.filter(isAssigned);
+
+  document.getElementById('countActive').textContent = myActive.length;
+  document.getElementById('countDone').textContent = myHist.filter(h=>h.status==='Selesai').length;
+
+  const today = new Date().toLocaleDateString();
+  document.getElementById('countToday').textContent =
+    myActive.filter(r=> new Date(r.tanggal).toLocaleDateString() === today).length;
+
+  document.getElementById('countPending').textContent =
+    myActive.filter(r => (r.status||'').toLowerCase()==='pending').length;
+
+  document.getElementById('totalTasks').textContent = myActive.length + myHist.length;
+}
+
+/* ===== ACTIVITY LIST ===== */
+function renderActivity(){
+  state.activities = JSON.parse(localStorage.getItem('activities')||'[]');
+  const el = document.getElementById('activityList');
+  el.innerHTML = '';
+
+  const myActs = state.activities.filter(a => a.user === username).slice(0,10);
+
+  if(!myActs.length){
+    el.innerHTML = `<li class="text-muted">Belum ada aktivitas</li>`;
+    return;
+  }
+
+  myActs.forEach(a=>{
+    el.innerHTML += `
+      <li>
+        <strong>${escapeHtml(a.text)}</strong><br>
+        <small class="text-muted">${a.waktu}</small>
+      </li>
+    `;
+  });
+}
+
+/* ===== ACTIVE TASK TABLE ===== */
+function renderActiveTable(keyword=''){
+  state.reports = JSON.parse(localStorage.getItem('reports')||'[]');
+  const el = document.getElementById('activeTable');
+  el.innerHTML = '';
+
+  let list = state.reports.filter(isAssigned);
+
+  if(keyword){
+    const k = keyword.toLowerCase();
+    list = list.filter(r =>
+      (r.noTiket||'').toLowerCase().includes(k) ||
+      (r.judul||'').toLowerCase().includes(k) ||
+      (r.tanggal||'').toLowerCase().includes(k) /* FIX: bisa cari tanggal */
+    );
+  }
+
+  if(!list.length){
+    el.innerHTML = `<tr><td colspan="6" class="text-center text-muted">Tidak ada tugas</td></tr>`;
+    return;
+  }
+
+  list.forEach(r=>{
+    const color = r.status==='Selesai' ? 'text-success'
+                : r.status==='Diproses' ? 'text-info'
+                : r.status==='Pending'  ? 'text-primary'
+                : 'text-muted';
+
+   el.innerHTML += `
+<tr>
+  <td>${r.noTiket}</td>
+  <td>${escapeHtml(r.user)}</td>
+  <td>${escapeHtml(r.unitKerja || '-')}</td>
+  <td>${escapeHtml(r.judul)}</td>
+  <td>${r.kategori||'-'}</td>
+  <td class="${color}">${r.status||'-'}</td>
+  <td>${r.tanggal||'-'}</td>
+  <td>
+    <button class="btn btn-info btn-sm" onclick="showDetail('${r.noTiket}')">Detail</button>
+    <button class="btn btn-success btn-sm" onclick="openFinishModal('${r.noTiket}')">Selesai</button>
+  </td>
+</tr>`;
+
+  });
+}
+
+/* ===== HISTORY TABLE ===== */
+function renderHistoryTable(keyword=''){
+  state.history = JSON.parse(localStorage.getItem('history')||'[]');
+  const el = document.getElementById('historyTable');
+  el.innerHTML = '';
+
+  let list = state.history.filter(isAssigned);
+
+  if(keyword){
+    const k = keyword.toLowerCase();
+    list = list.filter(r =>
+      (r.noTiket||'').toLowerCase().includes(k) ||
+      (r.judul||'').toLowerCase().includes(k) ||
+      (r.tanggalSelesai||'').toLowerCase().includes(k)
+    );
+  }
+
+  if(!list.length){
+    el.innerHTML = `<tr><td colspan="5" class="text-center text-muted">Belum ada riwayat</td></tr>`;
+    return;
+  }
+
+  list.forEach(r=>{
+el.innerHTML += `
+<tr>
+  <td>${r.noTiket}</td>
+  <td>${escapeHtml(r.user)}</td>
+  <td>${escapeHtml(r.unitKerja || '-')}</td>
+  <td>${escapeHtml(r.judul)}</td>
+  <td>${r.kategori||'-'}</td>
+  <td><span class="text-success fw-semibold">Selesai</span></td>
+  <td>${r.tanggalSelesai||'-'}</td>
+</tr>`;
+
+  });
+}
+
+/* ===== DETAIL TUGAS (Termasuk CATATAN ADMIN ✔) ===== */
+function showDetail(no){
+  state.reports = JSON.parse(localStorage.getItem('reports')||'[]');
+  state.history = JSON.parse(localStorage.getItem('history')||'[]');
+
+  const r = state.reports.find(x=>x.noTiket===no) || state.history.find(x=>x.noTiket===no);
+  if(!r) return alert('Tugas tidak ditemukan');
+
+  const imgUser = r.foto
+    ? `<p><strong>Lampiran User:</strong><br><img src="${r.foto}" style="max-width:100%; border-radius:8px; margin-top:8px"></p>`
+    : '';
+
+  const imgBukti = r.fotoBukti
+    ? `<p><strong>Foto Bukti Teknisi:</strong><br><img src="${r.fotoBukti}" style="max-width:100%; border-radius:8px; margin-top:8px"></p>`
+    : '';
+
+  const notesAdmin = r.notesAdmin
+    ? `<p><strong>Catatan Admin:</strong><br>${escapeHtml(r.notesAdmin)}</p>`
+    : '';
+
+  const hist = (r.history||[])
+    .map(h=>`<div class="small text-muted">${h.waktu} — ${h.status} (oleh: ${h.oleh})</div>`).join('');
+
+  document.getElementById('detailContent').innerHTML = `
+    <p><strong>No Tiket:</strong> ${r.noTiket}</p>
+    <p><strong>Judul:</strong> ${escapeHtml(r.judul)}</p>
+    <p><strong>Kategori:</strong> ${r.kategori||'-'}</p>
+    <p><strong>Status:</strong> ${r.status||'-'}</p>
+    <p><strong>Deskripsi:</strong><br>${escapeHtml(r.deskripsi||'-')}</p>
+
+    ${notesAdmin}
+    ${imgUser}
+    ${imgBukti}
+
+    <hr>
+    <b>Riwayat Status:</b><br>${hist}
+  `;
+
+  if(state.reports.some(x=>x.noTiket===no)){
+    document.getElementById('detailActions').innerHTML = `
+      <button class="btn btn-light" onclick="closeModal('detailModal')">Tutup</button>
+      <button class="btn btn-success ms-2" onclick="openFinishFromDetail('${no}')">Selesaikan</button>
+    `;
+  } else {
+    document.getElementById('detailActions').innerHTML = `
+      <button class="btn btn-light" onclick="closeModal('detailModal')">Tutup</button>
+    `;
+  }
+
+  openModal('detailModal');
+}
+
+/* ===== FINISH TASK ===== */
+function openFinishFromDetail(no){
+  closeModal('detailModal');
+  setTimeout(()=> openFinishModal(no), 250);
+}
+
+function openFinishModal(no){
+  document.getElementById('finishTicket').value = no;
+  document.getElementById('finishNotes').value = '';
+  document.getElementById('finishPhoto').value = '';
+  document.getElementById('photoPreview').innerHTML = '';
+  document.getElementById('finishDate').value = new Date().toISOString().slice(0,16);
+  openModal('finishModal');
+}
+
+/* Foto preview */
+document.getElementById('finishPhoto').addEventListener('change', e=>{
+  const f = e.target.files[0];
+  if(!f) return;
+
+  if(f.size > 1.5 * 1024 * 1024){
+    alert('Foto maksimal 1.5MB!');
+    e.target.value = '';
+    return;
+  }
+
+  const rd = new FileReader();
+  rd.onload = ev=>{
+    document.getElementById('photoPreview').innerHTML =
+      `<img src="${ev.target.result}" style="max-height:220px; border-radius:8px">`;
+  };
+  rd.readAsDataURL(f);
+});
+
+/* KONFIRMASI FINISH */
+document.getElementById('confirmFinish').onclick = ()=>{
+  const no    = document.getElementById('finishTicket').value;
+  const selesai = document.getElementById('finishDate').value;
+  const file  = document.getElementById('finishPhoto').files[0];
+  const notes = document.getElementById('finishNotes').value || '-';
+
+  if(!file) return alert('Foto bukti wajib!');
+
+  const rd = new FileReader();
+  rd.onload = ev=>{
+    state.reports = JSON.parse(localStorage.getItem('reports')||'[]');
+
+    const idx = state.reports.findIndex(r=>r.noTiket===no);
+    if(idx === -1) return alert('Tugas sudah tidak tersedia!');
+
+    const r = state.reports[idx];
+
+    r.status        = 'Selesai';
+    r.tanggalSelesai= new Date(selesai).toLocaleString();
+    r.fotoBukti     = ev.target.result;
+    r.notesTeknisi  = notes;
+
+    if(!r.history) r.history = [];
+    r.history.push({
+      status:'Selesai',
+      waktu: new Date().toLocaleString(),
+      oleh : username
+    });
+
+    const archive = deepClone(r);
+    archive.tanggal = archive.tanggalSelesai;
+
+    state.reports.splice(idx,1);
+    state.history.unshift(archive);
+
+    state.activities.unshift({
+      user: username,
+      text:`Menyelesaikan ${archive.noTiket}`,
+      waktu: new Date().toLocaleString()
+    });
+
+    save();
+    closeModal('finishModal');
+    alert('Tugas berhasil diselesaikan!');
+    renderAll();
+  };
+
+  rd.readAsDataURL(file);
+};
+
+/* ===== HELPERS ===== */
+function openModal(id){ document.getElementById(id).classList.add('show'); }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+
+/* ===== NAVIGATION ===== */
+function renderAll(){
+  renderCounts();
+  renderActivity();
+  renderActiveTable();
+}
+
+document.getElementById('searchActive').addEventListener('input', e=>{
+  renderActiveTable(e.target.value);
+});
+document.getElementById('searchHistory').addEventListener('input', e=>{
+  renderHistoryTable(e.target.value);
+});
+document.getElementById('refreshActive').onclick = ()=> renderActiveTable();
+
+const sidebar = document.getElementById("sidebar");
+const toggleBtn = document.getElementById("toggleSidebar");
+const mainContent = document.getElementById("mainContent");
+
+toggleBtn.onclick = () => {
+  sidebar.classList.toggle("closed");
+  mainContent.classList.toggle("expanded");
+};
+
+
+function navigate(hash){
+  document.querySelectorAll('main section')
+    .forEach(s => s.classList.add('hidden'));
+
+  const target = document.querySelector(hash);
+  if(target) target.classList.remove('hidden');
+
+  document.querySelectorAll('.sidebar a')
+    .forEach(a => a.classList.remove('active'));
+
+  const link = document.querySelector(`.sidebar a[href="${hash}"]`);
+  if(link) link.classList.add('active');
+
+  history.replaceState(null,'',hash);
+
+  if(hash==='#riwayat') renderHistoryTable();
+}
+
+
+if(!location.hash) navigate('#dashboard');
+else navigate(location.hash);
+
+/* ===== LOGOUT ===== */
+function logout(){
+  localStorage.removeItem('username');
+  localStorage.removeItem('role');
+  location.href='login.html';
+}
+document.getElementById('logoutBtn').onclick = logout;
+
+renderAll();
+
+window.addEventListener('storage', ()=> renderAll());
+</script>
+</body>
+</html>

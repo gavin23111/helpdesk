@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard - Helpdesk IT RSUD Dr. Soetomo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Vendor / Metronic -->
+  <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet">
+  <link href="assets/css/style.bundle.css" rel="stylesheet">
+
+  <!-- Master UI -->
+  <link href="assets/css/helpdesk-master.css" rel="stylesheet">
+</head>
+
+<body class="bg-body">
+
+<!-- ================= SIDEBAR ================= -->
+<aside id="sidebar" class="sidebar">
+  <a href="#dashboard" data-target="dashboard-section" class="active">Dashboard</a>
+  <a href="#search" data-target="search-section">Pencarian Tiket</a>
+  <a href="#laporan-aktif" data-target="laporan-aktif-section">Kelola Laporan</a>
+  <a href="#riwayat" data-target="riwayat-section">Riwayat Laporan</a>
+</aside>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar">
+  <div class="d-flex align-items-center gap-3">
+    <button id="toggleSidebar" class="toggle-btn">☰</button>
+    <h3>Helpdesk IT RSUD Dr. Soetomo</h3>
+  </div>
+  <div class="d-flex align-items-center gap-3">
+    <span class="fw-semibold text-gray-700">
+      👨‍💼 <span id="adminName"></span>
+    </span>
+    <button id="logoutBtn" class="btn btn-sm btn-light-danger fw-bold">Logout</button>
+  </div>
+</nav>
+
+<!-- ================= CONTENT ================= -->
+<main id="mainContent" class="content">
+
+<!-- ===== DASHBOARD ===== -->
+
+<section id="dashboard-section" class="section">
+  <div class="row g-4 mb-6">
+
+    <div class="col-xl-3 col-md-6">
+      <div class="card-counter counter-primary">
+        <h6>Total Tiket</h6>
+        <h2 id="totalTicket">0</h2>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+      <div class="card-counter counter-danger">
+        <h6>Dalam Antrean</h6>
+        <h2 id="waitingTicket">0</h2>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+      <div class="card-counter counter-info">
+        <h6>Diproses</h6>
+        <h2 id="processTicket">0</h2>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+      <div class="card-counter counter-success">
+        <h6>Selesai</h6>
+        <h2 id="doneTicket">0</h2>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <h6 class="fw-bold mb-3">Aktivitas Terbaru (Admin)</h6>
+    <ul id="activityListAdmin" class="activity-list mb-0"></ul>
+  </div>
+</section>
+
+<!-- ===== SEARCH ===== -->
+<section id="search-section" class="section hidden">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="fw-bold text-primary mb-0">Pencarian Tiket</h4>
+    </div>
+    <div class="card-body">
+      <div class="row g-4 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">No Tiket / User / Judul</label>
+          <input id="searchKeyword" class="form-control">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label fw-semibold">Tanggal Mulai</label>
+          <input type="date" id="startDate" class="form-control">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label fw-semibold">Tanggal Akhir</label>
+          <input type="date" id="endDate" class="form-control">
+        </div>
+        <div class="col-md-2 d-flex gap-2">
+          <button id="applyFilter" class="btn btn-primary w-100">Terapkan</button>
+          <button id="resetFilter" class="btn btn-light w-100">Reset</button>
+        </div>
+      </div>
+      <div id="adminSearchResult" class="mt-4"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LAPORAN AKTIF ===== -->
+<section id="laporan-aktif-section" class="section hidden">
+  <div class="card card-soft">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h4 class="fw-bold text-primary mb-0">Laporan Aktif</h4>
+      <div class="d-flex gap-3">
+        <input id="searchActive" class="form-control form-control-sm">
+        <select id="filterStatus" class="form-select form-select-sm">
+          <option value="">Semua Status</option>
+          <option>Menunggu</option>
+          <option>Diproses</option>
+          <option>Ditugaskan</option>
+          <option>Pending</option>
+        </select>
+      </div>
+    </div>
+    <div class="card-body p-0">
+      <table class="table table-striped align-middle mb-0">
+       <thead>
+<thead>
+  <tr>
+    <th>No Tiket</th>
+    <th>Nama User</th>
+    <th>Unit Kerja</th>
+    <th>Judul</th>
+    <th>Urgensi</th>
+    <th>Status</th>
+    <th>Tanggal</th>
+    <th class="text-center">Aksi</th>
+  </tr>
+</thead>
+
+
+        <tbody id="reportTable"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== RIWAYAT ===== -->
+<section id="riwayat-section" class="section hidden">
+  <div class="card card-soft">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h4 class="fw-bold text-primary mb-0">Riwayat Laporan</h4>
+      <div class="d-flex gap-3">
+        <input id="searchHistory" class="form-control form-control-sm">
+        <select id="filterTeknisi" class="form-select form-select-sm"></select>
+      </div>
+    </div>
+    <div class="card-body p-0">
+      <table class="table table-striped align-middle mb-0">
+<thead>
+  <tr>
+    <th>No Tiket</th>
+    <th>Nama User</th>
+    <th>Unit Kerja</th>
+    <th>Judul</th>
+    <th>Urgensi</th>
+    <th>Status</th>
+    <th>Tanggal</th>
+    <th class="text-center">Aksi</th>
+  </tr>
+</thead>
+
+
+        <tbody id="historyTable"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DETAIL MODAL ================= -->
+<div id="detailModal" class="modal">
+  <div class="modal-content">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="fw-bold mb-0">Detail Tiket</h4>
+      <button id="closeDetailBtn" class="btn btn-sm btn-light">✕</button>
+    </div>
+
+    <div id="detailContent"></div>
+
+    <hr>
+    <h6 class="fw-bold">Riwayat Status</h6>
+    <ul id="detailHistory"></ul>
+
+    <!-- Tombol admin -->
+<div id="adminButtons" class="admin-buttons">
+    <button id="assignBtn" class="btn btn-success">Tugaskan</button>
+    <button id="pendingBtn" class="btn btn-warning">Pending</button>
+    <button id="finishBtn" class="btn btn-primary">Selesai</button>
+</div>
+
+<!-- ================= MODAL ASSIGN TEKNISI (FINAL) ================= -->
+<div id="assignModal" class="modal">
+  <div class="modal-content">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold mb-0">Tugaskan Teknisi</h5>
+      <button onclick="closeModal('assignModal')" class="btn btn-sm btn-light">✕</button>
+    </div>
+
+    <!-- SEARCH + DROPDOWN (WAJIB WRAPPER) -->
+    <div class="assign-teknisi-wrapper mb-3">
+      <label class="form-label fw-semibold">Cari Teknisi</label>
+      <input
+        id="searchTeknisi"
+        class="form-control"
+        placeholder="Ketik nama teknisi..."
+        autocomplete="off"
+      >
+      <div id="dropdownTeknisi" class="dropdown-teknisi"></div>
+    </div>
+
+    <!-- TAG TEKNISI TERPILIH -->
+    <div id="tagContainer" class="tag-container mb-3"></div>
+
+    <!-- CATATAN ADMIN -->
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Catatan Admin (opsional)</label>
+      <textarea
+        id="assignNote"
+        class="form-control"
+        rows="3"
+        placeholder="Catatan untuk teknisi..."
+      ></textarea>
+    </div>
+
+    <!-- ACTION -->
+    <div class="d-flex justify-content-end gap-2 mt-4">
+      <button class="btn btn-light" onclick="closeModal('assignModal')">Batal</button>
+      <button id="confirmAssign" class="btn btn-success fw-bold">
+        Konfirmasi Penugasan
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+
+</main>
+
+<!-- ================= SCRIPT ================= -->
+<script src="assets/js/admin.js"></script>
+
+<script>
+/* Sidebar toggle */
+const sidebar = document.getElementById("sidebar");
+const toggleBtn = document.getElementById("toggleSidebar");
+const mainContent = document.getElementById("mainContent");
+
+toggleBtn.onclick = () => {
+  sidebar.classList.toggle("closed");
+  mainContent.classList.toggle("expanded");
+};
+
+/* Navigation switch */
+document.querySelectorAll(".sidebar a").forEach(link => {
+  link.addEventListener("click", e => {
+    e.preventDefault();
+
+    document.querySelectorAll(".sidebar a").forEach(a => a.classList.remove("active"));
+    link.classList.add("active");
+
+    document.querySelectorAll(".section").forEach(sec => sec.classList.add("hidden"));
+    document.getElementById(link.dataset.target).classList.remove("hidden");
+  });
+});
+</script>
+
+</body>
+</html>

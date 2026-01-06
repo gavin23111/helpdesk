@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Helpdesk IT RSUD Dr. Soetomo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Metronic -->
+  <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" />
+  <link href="assets/css/style.bundle.css" rel="stylesheet" />
+
+<style>
+
+/* ===== Layout ===== */
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  font-family:"Inter",system-ui;
+}
+
+.login-wrapper{
+  width:100%;
+  height:100vh;
+  display:flex;
+}
+
+/* ===== LEFT PANEL (Branding RS) ===== */
+.login-left{
+  flex:1.2;
+  background:url("assets/media/patterns/rsud.jpg") center/cover no-repeat;
+  position:relative;
+}
+
+.login-left::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.8),rgba(0,0,0,.55));
+}
+
+.login-left-content{
+  position:relative;
+  z-index:5;
+  color:white;
+  padding:60px;
+  max-width:520px;
+}
+
+.login-left-content .logo{
+  width:90px;
+  margin-bottom:14px;
+}
+
+.login-left-content h1{
+  margin:0;
+  font-size:28px;
+  font-weight:800;
+}
+
+.subtitle{
+  margin-top:6px;
+  opacity:.9;
+  font-size:14px;
+}
+
+.tagline{
+  display:inline-block;
+  margin-top:18px;
+  background:rgba(255,255,255,.1);
+  padding:10px 14px;
+  border-radius:10px;
+  font-weight:600;
+}
+
+/* ===== RIGHT PANEL (FORM) ===== */
+.login-right{
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:40px;
+  background:white;
+}
+
+.login-card{
+  width:100%;
+  max-width:420px;
+}
+
+.login-card .title{
+  font-weight:800;
+  margin-bottom:4px;
+}
+
+.login-card .desc{
+  color:#64748b;
+  margin-bottom:30px;
+}
+
+/* ===== Responsive ===== */
+@media(max-width:900px){
+  .login-left{ display:none; }
+  .login-right{
+    width:100%;
+  }
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="login-wrapper">
+
+  <!-- LEFT SIDE -->
+  <div class="login-left">
+    <div class="login-left-content">
+      <img src="assets/media/logos/lambangRsds.png" class="logo">
+
+      <h1>RSUD Dr. Soetomo</h1>
+      <p class="subtitle">
+        Helpdesk IT — Sistem Pelaporan & Perbaikan Infrastruktur Teknologi
+      </p>
+
+      <span class="tagline">
+        “Cepat • Tepat • Terintegrasi”
+      </span>
+    </div>
+  </div>
+
+  <!-- RIGHT SIDE -->
+  <div class="login-right">
+    <div class="login-card">
+
+      <h2 class="title">Masuk ke Sistem</h2>
+      <p class="desc">Silakan login menggunakan akun Anda</p>
+
+      <form id="loginForm">
+
+        <div class="fv-row mb-5">
+          <label class="form-label fw-semibold">Username / NIP</label>
+          <input id="username" class="form-control form-control-lg"
+                 type="text" placeholder="Masukkan username" required>
+        </div>
+
+        <div class="fv-row mb-5">
+          <label class="form-label fw-semibold">Password</label>
+          <input id="password" class="form-control form-control-lg"
+                 type="password" placeholder="Masukkan password" required>
+        </div>
+
+        <button type="submit"
+                class="btn btn-lg btn-primary w-100 fw-bold mb-4">
+          Masuk
+        </button>
+
+        <a href="signin.html" class="btn btn-light w-100">
+          Belum punya akun? Daftar
+        </a>
+
+      </form>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- JS -->
+<script src="assets/plugins/global/plugins.bundle.js"></script>
+<script src="assets/js/scripts.bundle.js"></script>
+
+<script>
+document.getElementById("loginForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  let accounts = JSON.parse(localStorage.getItem("accounts")) || [];
+  const acc = accounts.find(a => a.username === username && a.password === password);
+
+  if(acc){
+    localStorage.setItem("username", acc.username);
+    localStorage.setItem("role", acc.role);
+    window.location.href = acc.role + ".html";
+  } else {
+    alert("Login gagal! Username atau password salah.");
+  }
+});
+</script>
+
+</body>
+</html>

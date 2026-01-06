@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>User Dashboard — Helpdesk IT RSUD Dr. Soetomo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Vendor / Metronic -->
+  <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet">
+  <link href="assets/css/style.bundle.css" rel="stylesheet">
+
+  <!-- MASTER CSS -->
+  <link href="assets/css/helpdesk-master.css" rel="stylesheet">
+</head>
+
+<body class="role-user bg-body">
+
+<!-- ================= SIDEBAR ================= -->
+<aside id="sidebar" class="sidebar">
+  <a href="#dashboard" class="active" onclick="navigate('#dashboard')">Dashboard</a>
+  <a href="#laporan" onclick="navigate('#laporan')">Buat Laporan</a>
+  <a href="#track" onclick="navigate('#track')">Lacak Laporan</a>
+  <a href="#riwayat" onclick="navigate('#riwayat')">Riwayat Laporan</a>
+</aside>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar">
+  <div class="d-flex align-items-center">
+    <button id="toggleSidebar" class="toggle-btn">☰</button>
+    <h3 class="mb-0">Helpdesk IT RSUD Dr. Soetomo</h3>
+  </div>
+  <div class="d-flex align-items-center">
+    <span class="fw-semibold me-4 text-gray-700">
+      👤 <span id="userName"></span>
+    </span>
+    <button class="btn btn-sm btn-light-danger fw-bold" id="logoutBtn">Logout</button>
+  </div>
+</nav>
+
+<!-- ================= CONTENT ================= -->
+<main id="mainContent" class="content">
+
+<!-- DASHBOARD -->
+<section id="dashboard">
+  <div class="card card-dashboard mb-10">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h4 class="card-title fw-bold text-primary">Selamat Datang di Helpdesk IT</h4>
+      <small class="text-muted">Panel pengguna</small>
+    </div>
+
+    <div class="card-body">
+      <p>
+        Halo <span class="fw-semibold text-primary" id="userNameDashboard"></span>,
+        silakan gunakan menu di samping.
+      </p>
+
+      <!-- COUNTERS -->
+      <div class="row g-5 mt-4">
+        <div class="col-md-3">
+          <div class=   "card-counter counter-danger">
+            <h6 class="text-muted mb-1">Dalam Antrean</h6>
+            <h2 id="countMenunggu">0</h2>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card-counter counter-info text-center">
+            <h6 class="text-muted mb-1">Diproses</h6>
+            <h2 id="countDiproses">0</h2>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card-counter counter-warning text-center">
+            <h6 class="text-muted mb-1">Pending</h6>
+            <h2 id="countPending">0</h2>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card-counter counter-success text-center">
+            <h6 class="text-muted mb-1">Selesai</h6>
+            <h2 id="countSelesai">0</h2>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVITY -->
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <h6 class="fw-bold">Aktivitas Terakhir Saya</h6>
+          <ul id="activityList" class="activity-list"></ul>
+        </div>
+        <div class="col-md-6 text-end">
+          <small class="text-muted">
+            Total laporan Anda: <span id="totalReports">0</span>
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORM LAPORAN -->
+<section id="laporan" class="hidden">
+  <div class="card mb-10">
+    <div class="card-header">
+      <h4 class="card-title fw-bold text-primary">Form Laporan Insiden</h4>
+    </div>
+    <div class="card-body">
+
+      <form id="reportForm">
+        <div class="row g-5">
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Judul Masalah</label>
+            <input id="judul" type="text" class="form-control form-control-solid" required>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Kategori</label>
+            <select id="kategori" class="form-select form-select-solid" required>
+              <option value="">-- Pilih Kategori --</option>
+              <option>Jaringan</option>
+              <option>Hardware</option>
+              <option>Software</option>
+              <option>EMR</option>
+              <option>Akses Akun</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Unit Kerja</label>
+            <input id="unit" type="text" class="form-control form-control-solid" required>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Tingkat Urgensi</label>
+            <select id="urgensi" class="form-select form-select-solid" required>
+              <option value="">-- Pilih Urgensi --</option>
+              <option value="Rendah">Rendah</option>
+              <option value="Sedang">Sedang</option>
+              <option value="Tinggi">Tinggi</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mt-5">
+          <label class="form-label fw-semibold">Deskripsi</label>
+          <textarea id="deskripsi" class="form-control form-control-solid" rows="4" required></textarea>
+        </div>
+
+        <div class="mt-5">
+          <label class="form-label fw-semibold">Upload Lampiran (Opsional)</label>
+          <input id="foto" type="file" class="form-control form-control-solid" accept="image/*">
+        </div>
+
+        <div class="text-end mt-6">
+          <button type="submit" class="btn btn-primary fw-bold px-8">
+            Kirim Laporan
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</section>
+
+<!-- TRACK -->
+<section id="track" class="hidden">
+  <div class="card card-soft">
+    <div class="card-header">
+      <h4 class="fw-bold text-primary">Lacak Laporan Aktif</h4>
+    </div>
+    <div class="card-body p-0">
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th>No Tiket</th>
+            <th>Judul</th>
+            <th>Status</th>
+            <th>Tanggal</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="trackTable"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- RIWAYAT -->
+<section id="riwayat" class="hidden">
+  <div class="card card-soft">
+    <div class="card-header">
+      <h4 class="fw-bold text-primary">Riwayat Laporan Saya</h4>
+    </div>
+    <div class="card-body p-0">
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th>No Tiket</th>
+            <th>Judul</th>
+            <th>Status</th>
+            <th>Tanggal</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="myReports"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ================= MODAL ================= -->
+<div class="modal" id="detailModal">
+  <div class="modal-content">
+    <h5 class="fw-bold mb-3">Detail Laporan</h5>
+    <div id="detailContent"></div>
+    <div class="text-end mt-3" id="detailActions"></div>
+  </div>
+</div>
+
+<script>
+// SETUP USER
+const username = localStorage.getItem("username") || "user1";
+userName.textContent = username;
+userNameDashboard.textContent = username;
+logoutBtn.onclick = () => location.href = "login.html";
+
+// STORAGE
+let reports = JSON.parse(localStorage.getItem("reports") || "[]");
+let historyData = JSON.parse(localStorage.getItem("history") || "[]");
+
+// NAVIGASI
+function navigate(hash){
+  document.querySelectorAll("section").forEach(s=>s.style.display="none");
+  document.querySelector(hash).style.display="block";
+
+  document.querySelectorAll(".sidebar a").forEach(a=>a.classList.remove("active"));
+  document.querySelector(`.sidebar a[href="${hash}"]`).classList.add("active");
+
+  if(hash === "#track") renderTrackTable();
+  if(hash === "#riwayat") renderRiwayat();
+}
+navigate("#dashboard");
+
+// FORMAT TIKET
+function generateTicket(){
+  const d = new Date();
+  const tgl = `${d.getFullYear()}${(d.getMonth()+1+"").padStart(2,"0")}${(d.getDate()+"").padStart(2,"0")}`;
+  return `${tgl}-${Math.floor(100+Math.random()*900)}`;
+}
+
+// SUBMIT LAPORAN
+reportForm.onsubmit = function(e){
+  e.preventDefault();
+
+const data = {
+  noTiket: generateTicket(),
+  user: username,
+  unitKerja: unit.value.trim(), // ✅ SAMA DENGAN ADMIN
+  judul: judul.value.trim(),
+  kategori: kategori.value,
+  urgensi: urgensi.value,
+  deskripsi: deskripsi.value.trim(),
+  foto: null,
+  status: "Dalam Antrean",
+  teknisi: null,
+  tanggal: new Date().toLocaleString()
+};
+
+
+
+  if(!data.judul || !data.kategori || !data.urgensi || !data.unitKerja || !data.deskripsi){
+    alert("Lengkapi semua field!");
+    return;
+  }
+
+  const fotoFile = foto.files[0];
+  if(fotoFile){
+    const reader = new FileReader();
+    reader.onload = e => {
+      data.foto = e.target.result;
+      simpan();
+    };
+    reader.readAsDataURL(fotoFile);
+  } else simpan();
+
+  function simpan(){
+    reports.unshift(data);
+    localStorage.setItem("reports", JSON.stringify(reports));
+    alert("✅ Laporan berhasil dikirim!");
+    reportForm.reset();
+    navigate("#track");
+    renderTrackTable();
+    renderDashboard();
+  }
+};
+
+// LACAK TABEL
+function renderTrackTable(keyword=""){
+  const tbody = trackTable;
+  tbody.innerHTML = "";
+
+  const data = reports.filter(r =>
+    r.user === username &&
+    r.noTiket.toLowerCase().includes(keyword.toLowerCase())
+  );
+
+  if(!data.length){
+    tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted">Tidak ada laporan aktif</td></tr>`;
+    return;
+  }
+
+  data.forEach(r=>{
+    const warna =
+      r.status==="Pending"?"warning":
+      r.status==="Diproses"?"info":
+      r.status==="Dalam Antrean"?"secondary":"success";
+
+    tbody.innerHTML += `
+      <tr>
+        <td>${r.noTiket}</td>
+        <td>${r.judul}</td>
+        <td><span class="badge bg-${warna}">${r.status}</span></td>
+        <td>${r.tanggal}</td>
+        <td>
+          <button class="btn btn-sm btn-primary" onclick="showDetail('${r.noTiket}')">Detail</button>
+          <button class="btn btn-sm btn-success ms-1" onclick="setSelesaiUser('${r.noTiket}')">Selesaikan</button>
+        </td>
+      </tr>`;
+  });
+}
+
+// SELESAIKAN
+function setSelesaiUser(no){
+  if(!confirm("Selesaikan laporan ini?")) return;
+
+  const idx = reports.findIndex(r=>r.noTiket===no);
+  if(idx === -1) return;
+
+  reports[idx].status = "Selesai";
+  reports[idx].tanggalSelesai = new Date().toLocaleString();
+
+  historyData.unshift(reports[idx]);
+  localStorage.setItem("history", JSON.stringify(historyData));
+
+  reports.splice(idx,1);
+  localStorage.setItem("reports", JSON.stringify(reports));
+
+  closeModal("detailModal");
+  renderTrackTable();
+  renderRiwayat();
+  renderDashboard();
+}
+
+// RIWAYAT
+function renderRiwayat(){
+  const tbody = myReports;
+  tbody.innerHTML = "";
+
+  const data = historyData.filter(r=>r.user===username);
+
+  if(!data.length){
+    tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted">Belum ada tiket selesai</td></tr>`;
+    return;
+  }
+
+  data.forEach(r=>{
+    tbody.innerHTML += `
+      <tr>
+        <td>${r.noTiket}</td>
+        <td>${r.judul}</td>
+        <td><span class="badge bg-success">Selesai</span></td>
+        <td>${r.tanggalSelesai}</td>
+        <td><button class="btn btn-sm btn-primary" onclick="showDetail('${r.noTiket}')">Detail</button></td>
+      </tr>`;
+  });
+}
+
+// MODAL DETAIL
+function showDetail(no){
+  let r = reports.find(x=>x.noTiket===no);
+  if(!r) r = historyData.find(x=>x.noTiket===no);
+  if(!r) return alert("Data tidak ditemukan");
+
+  detailContent.innerHTML = `
+    <div class="row g-2 small">
+      <div class="col-6"><b>No Tiket:</b><br>${r.noTiket}</div>
+      <div class="col-6"><b>Status:</b><br>${r.status}</div>
+      <div class="col-12"><b>Judul:</b><br>${r.judul}</div>
+      <div class="col-6"><b>Kategori:</b><br>${r.kategori}</div>
+      <div class="col-6">
+        <b>Urgensi:</b><br>
+        <span class="badge bg-${badgeUrgensi(r.urgensi)}">${r.urgensi}</span>
+      </div>
+   <div class="col-12"><b>Unit Kerja:</b><br>${r.unitKerja}</div>
+
+      <div class="col-12"><b>Deskripsi:</b><br>${r.deskripsi}</div>
+      ${r.foto ? `<img src="${r.foto}" class="img-preview mt-2">` : ""}
+    </div>`;
+
+  detailActions.innerHTML = `
+    ${r.status!=="Selesai" ? `<button class="btn btn-success btn-sm" onclick="setSelesaiUser('${r.noTiket}')">Selesaikan</button>` : ""}
+    <button class="btn btn-secondary btn-sm" onclick="closeModal('detailModal')">Tutup</button>`;
+
+  openModal("detailModal");
+}
+
+// DASHBOARD
+function renderDashboard(){
+  const my = reports.filter(r=>r.user===username);
+  const selesai = historyData.filter(r=>r.user===username);
+
+  countMenunggu.textContent = my.filter(r=>r.status==="Dalam Antrean").length;
+  countDiproses.textContent = my.filter(r=>r.status==="Diproses").length;
+  countPending.textContent  = my.filter(r=>r.status==="Pending").length;
+  countSelesai.textContent  = selesai.length;
+  totalReports.textContent = my.length + selesai.length;
+}
+function badgeUrgensi(level){
+  if(level === "Tinggi") return "danger";
+  if(level === "Sedang") return "warning";
+  return "success";
+}
+
+function syncStatusWithAssignment() {
+  reports.forEach(r => {
+    if (r.assignedTo && r.status !== "Selesai") {
+      r.status = "Diproses";
+    }
+  });
+  localStorage.setItem("reports", JSON.stringify(reports));
+}
+
+
+
+// MODAL
+function openModal(id){ document.getElementById(id).classList.add("show"); }
+function closeModal(id){ document.getElementById(id).classList.remove("show"); }
+
+/* ============================================================
+   ✅ FIX: TOGGLE SIDEBAR YANG SEBELUMNYA TIDAK ADA
+   ============================================================ */
+const sidebar = document.getElementById("sidebar");
+const toggleBtn = document.getElementById("toggleSidebar");
+const mainContent = document.getElementById("mainContent");
+
+toggleBtn.onclick = () => {
+    sidebar.classList.toggle("closed");
+    mainContent.classList.toggle("expanded");
+};
+
+
+
+
+// INIT
+syncStatusWithAssignment();
+renderTrackTable();
+renderRiwayat();
+renderDashboard();
+</script>
+
+</body>
+</html>
